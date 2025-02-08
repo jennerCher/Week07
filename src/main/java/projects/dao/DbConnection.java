@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 import projects.exception.DbException;
 
-public class DbConnection {
+public class  	 {
 	private static final String SCHEMA = "projects";
 	private static final String USER = "projects";
 	private static final String PASSWORD = "projects";
