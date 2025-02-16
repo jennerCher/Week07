@@ -1,17 +1,19 @@
 package projects;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
+import entity.Project;
 import projects.exception.DbException;
+import projects.service.ProjectService;
 
 public class ProjectsApp {
-	/*
-	 * 2. Add a private instance variable names scanner and initialize to a new Scanner
-	 * Pass System.in to the constructor.
-	 */
+	
 	private Scanner scanner = new Scanner(System.in);
+	
+	private ProjectService projectService = new ProjectService();
 
 	// @formatter:off
 	/*
@@ -54,6 +56,9 @@ public class ProjectsApp {
 					case -1:
 						done = exitMenu();
 						break;
+					case 1:
+						createProject();
+						break;
 
 					default:
 						System.out.println("\n" + selection + " is not a valid selection. Try again.");
@@ -66,6 +71,45 @@ public class ProjectsApp {
 		}
 	}
 
+	private void createProject() {
+		String projectName = getStringInput("Enter the project name");
+		BigDecimal estimatedHours = new BigDecimal(getStringInput("Enter the estimated hours"));
+		BigDecimal actualHours = new BigDecimal(getStringInput("Enter the actual hours"));
+		int difficulty = getIntInput("Enter the project difficulty (1-5)");
+		String notes = getStringInput("Enter the project notes");
+		
+		Project project = new Project();
+		
+		project.setProjectName(projectName);
+		project.setEstimatedHours(estimatedHours);
+		project.setActualHours(actualHours);
+		project.setDifficulty(difficulty);
+		project.setNotes(notes);
+		
+		@SuppressWarnings("unused")
+		Project dbProject = projectService.addProject(project);
+		System.out.println("You have succesfully created project: + dbProject");
+			
+		
+	}
+	
+	@SuppressWarnings("unused")
+	private BigDecimal getDecimalInput(String prompt) {
+		String input = getStringInput(prompt);
+		if (Objects.isNull(input)) {
+			return null;
+		}
+		// 
+		try {
+			return new BigDecimal(input);
+		//	In the catch block throw a new DbException with the message, input + " is not a valid number. Try again."
+		} catch (NumberFormatException e) {
+			throw new DbException(input + " is not a valid decimal number");
+		}
+
+	}
+	
+	
 	private boolean exitMenu() {
 
 		System.out.println("\nExiting the menu.");
