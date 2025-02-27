@@ -22,7 +22,7 @@ public class ProjectService {
 	}
 
 		
-		/*	
+		
 		private void loadFromFile(String fileName) {
 			String content = readFileContent(fileName);
 			List<String> sqlStatements = convertContentToSqlStatements(content);
@@ -30,7 +30,7 @@ public class ProjectService {
 			projectDao.executeBatch(sqlStatements);
 			
 		}
-		*/
+		
 		private List<String> convertContentToSqlStatements(String content) {
 			content = removeComments(content);
 			content = replaceWhitespaceSequencesWithSingleSpace(content);
@@ -99,6 +99,24 @@ public class ProjectService {
 		    return projectDao.fetchProjectById(projectId)
 		            .orElseThrow(() -> new NoSuchElementException("Project with project id " + projectId + " does not exits."));
 		    		
+		}
+
+
+		public void deleteProject(Integer projectId) {
+			if(!projectDao.deleteProject(projectId)) {
+				throw new DbException("Project with ID=" + projectId + " does not exist");
+			}
+			
+		}
+
+
+		public void modifyProjectDetails(Project project) {
+			if(!projectDao.modifyProjectDetails(project)) {
+				throw new DbException("Project with ID=" + project.getProjectId() + " does not exist");
+				
+			}
+	
+			
 		}
 
 		
